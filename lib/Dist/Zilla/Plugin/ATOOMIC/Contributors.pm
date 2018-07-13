@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::DROLSKY::Contributors;
+package Dist::Zilla::Plugin::ATOOMIC::Contributors;
 
 use v5.10;
 
@@ -14,7 +14,7 @@ use Moose;
 with 'Dist::Zilla::Role::BeforeBuild';
 
 my $mailmap = <<'EOF';
-Dave Rolsky <autarch@urth.org> <devnull@localhost>
+Nicolas R <atoomic@cpan.org> <devnull@localhost>
 EOF
 
 my %files = (

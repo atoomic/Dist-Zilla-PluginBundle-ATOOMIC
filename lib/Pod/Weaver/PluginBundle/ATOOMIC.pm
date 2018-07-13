@@ -1,4 +1,4 @@
-package Pod::Weaver::PluginBundle::DROLSKY;
+package Pod::Weaver::PluginBundle::ATOOMIC;
 
 use strict;
 use warnings;
@@ -87,7 +87,7 @@ sub configure {
         ( $ENV{TRAVIS} ? () : [ $self->_source_section ] ),
     );
 
-    my $config = $self->_plugin_matching( $zilla, 'DROLSKY::WeaverConfig' );
+    my $config = $self->_plugin_matching( $zilla, 'ATOOMIC::WeaverConfig' );
     push @weaver_config, [ $self->_donation_section ]
         if $zilla->copyright_holder =~ /Rolsky/
         && $config->include_donations_pod;
@@ -163,7 +163,7 @@ join "\n\n", (
         : (),
     ),
     (
-        ( $distmeta->{x_authority} // '' ) eq 'cpan:DROLSKY'
+        ( $distmeta->{x_authority} // '' ) eq 'cpan:ATOOMIC'
         ? q{I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.}
         : (),
     ),
@@ -283,7 +283,7 @@ sub _expand_config {
 
     use_module( $class, $payload->{':version'} ) if $payload->{':version'};
 
-    # prepend '@DROLSKY/' to each class name,
+    # prepend '@ATOOMIC/' to each class name,
     # except for Generic and Collect which are left alone.
     $name = '@' . $self->_prefix . '/' . $name
         if $class ne _exp('Generic')
@@ -294,7 +294,7 @@ sub _expand_config {
 
 1;
 
-# ABSTRACT: A plugin bundle for pod woven by DROLSKY
+# ABSTRACT: A plugin bundle for pod woven by ATOOMIC
 
 __END__
 
@@ -306,16 +306,16 @@ __END__
 
 In your F<weaver.ini>:
 
-    [@DROLSKY]
+    [@ATOOMIC]
 
 Or in your F<dist.ini>
 
     [PodWeaver]
-    config_plugin = @DROLSKY
+    config_plugin = @ATOOMIC
 
 It is also used automatically when your F<dist.ini> contains:
 
-    [@DROLSKY]
+    [@ATOOMIC]
     :version = 0.094
 
 =head1 DESCRIPTION
@@ -373,7 +373,7 @@ following F<weaver.ini>, minus some optimizations:
     match_anywhere = 0
 
     ; Can be disabled in dist.ini with
-    ;   DROLSKY::WeaverConfig.include_donations_pod = 0
+    ;   ATOOMIC::WeaverConfig.include_donations_pod = 0
     [GenerateSection / generate DONATIONS]
     title = DONATIONS
     main_module_only = 1
@@ -432,14 +432,14 @@ be possible without updates to L<Pod::Weaver>.)
 This F<weaver.ini> will let you use a custom C<COPYRIGHT AND LICENSE> section
 and still use the plugin bundle:
 
-    [@DROLSKY]
+    [@ATOOMIC]
     [AllowOverride / OverrideLegal]
     header_re = ^COPYRIGHT
     match_anywhere = 1
 
 =head1 ADDING STOPWORDS FOR SPELLING TESTS
 
-As noted in L<Dist::Zilla::PluginBundle::DROLSKY>, stopwords for
+As noted in L<Dist::Zilla::PluginBundle::ATOOMIC>, stopwords for
 spelling tests can be added by adding a directive to pod:
 
     =for stopwords foo bar baz
@@ -458,6 +458,6 @@ woven ahead of everything else:
 * L<Pod::Weaver>
 * L<Pod::Weaver::PluginBundle::Default>
 * L<Dist::Zilla::Plugin::PodWeaver>
-* L<Dist::Zilla::PluginBundle::DROLSKY>
+* L<Dist::Zilla::PluginBundle::ATOOMIC>
 
 =cut

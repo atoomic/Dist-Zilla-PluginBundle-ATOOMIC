@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::DROLSKY::RunExtraTests;
+package Dist::Zilla::Plugin::ATOOMIC::RunExtraTests;
 
 use v5.10;
 
@@ -15,7 +15,7 @@ use Moose;
 
 extends 'Dist::Zilla::Plugin::RunExtraTests';
 
-with 'Dist::Zilla::Plugin::DROLSKY::Role::CoreCounter';
+with 'Dist::Zilla::Plugin::ATOOMIC::Role::CoreCounter';
 
 # Dist::Zilla provides no way to pass a `-j` option when running dzil release
 # but I really would like faster releases.

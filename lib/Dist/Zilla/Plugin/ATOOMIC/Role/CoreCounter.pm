@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::DROLSKY::Role::CoreCounter;
+package Dist::Zilla::Plugin::ATOOMIC::Role::CoreCounter;
 
 use v5.10;
 

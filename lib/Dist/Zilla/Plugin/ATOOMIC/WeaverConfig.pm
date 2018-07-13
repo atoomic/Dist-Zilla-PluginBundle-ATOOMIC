@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::DROLSKY::WeaverConfig;
+package Dist::Zilla::Plugin::ATOOMIC::WeaverConfig;
 
 use v5.10;
 

@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::DROLSKY::License;
+package Dist::Zilla::Plugin::ATOOMIC::License;
 
 use v5.10;
 

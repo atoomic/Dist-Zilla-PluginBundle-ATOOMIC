@@ -1,26 +1,26 @@
 # NAME
 
-Dist::Zilla::PluginBundle::DROLSKY - DROLSKY's plugin bundle
+Dist::Zilla::PluginBundle::ATOOMIC - ATOOMIC's plugin bundle
 
 # VERSION
 
-version 0.99
+version 1.00
 
 # SYNOPSIS
 
     name    = My-Module
-    author  = Dave Rolsky <autarch@urth.org>
+    author  = Nicolas R <atoomic@cpan.org>
     license = Artistic_2_0
     copyright_holder = Dave Rolsky
 
-    [@DROLSKY]
+    [@ATOOMIC]
     dist = My-Module
-    ; Default is DROLSKY::MakeMaker - or set it to ModuleBuild
-    make_tool = DROLSKY::MakeMaker
+    ; Default is ATOOMIC::MakeMaker - or set it to ModuleBuild
+    make_tool = ATOOMIC::MakeMaker
     ; These files won't be added to tarball
     exclude_files = ...
-    ; Default is DROLSKY
-    authority = DROLSKY
+    ; Default is ATOOMIC
+    authority = ATOOMIC
     ; Used to do things like add the PPPort plugin - determined automatically but can be overridden
     has_xs = ...
     ; Passed to AutoPrereqs - can be repeated
@@ -54,8 +54,8 @@ configure any plugin as needed.
 
 This is more or less equivalent to the following `dist.ini`:
 
-    ; Picks one of these - defaults to DROLSKY::MakeMaker
-    [DROLSKY::MakeMaker]
+    ; Picks one of these - defaults to ATOOMIC::MakeMaker
+    [ATOOMIC::MakeMaker]
     [ModuleBuild]
 
     [Git::GatherDir]
@@ -147,18 +147,18 @@ This is more or less equivalent to the following `dist.ini`:
 
     [PromptIfStale]
     phase  = build
-    module = Dist::Zilla::PluginBundle::DROLSKY
+    module = Dist::Zilla::PluginBundle::ATOOMIC
 
     [PromptIfStale]
     phase = release
     check_all_plugins = 1
     check_all_prereqs = 1
     check_authordeps  = 1
-    skip = Dist::Zilla::Plugin::DROLSKY::Contributors
-    skip = Dist::Zilla::Plugin::DROLSKY::Git::CheckFor::CorrectBranch
-    skip = Dist::Zilla::Plugin::DROLSKY::License
-    skip = Dist::Zilla::Plugin::DROLSKY::TidyAll
-    skip = Pod::Weaver::PluginBundle::DROLSKY
+    skip = Dist::Zilla::Plugin::ATOOMIC::Contributors
+    skip = Dist::Zilla::Plugin::ATOOMIC::Git::CheckFor::CorrectBranch
+    skip = Dist::Zilla::Plugin::ATOOMIC::License
+    skip = Dist::Zilla::Plugin::ATOOMIC::TidyAll
+    skip = Pod::Weaver::PluginBundle::ATOOMIC
 
     [Test::Pod::Coverage::Configurable]
     ; Configured by setting pod_coverage_class for the bundle
@@ -174,7 +174,7 @@ This is more or less equivalent to the following `dist.ini`:
 
     [PodSyntaxTests]
 
-    [DROLSKY::RunExtraTests]
+    [ATOOMIC::RunExtraTests]
     [MojibakeTests]
     [Test::CleanNamespaces]
     [Test::CPAN::Changes]
@@ -199,17 +199,17 @@ This is more or less equivalent to the following `dist.ini`:
     is_strict = 1
 
     ; Generates/updates a .mailmap file
-    [DROLSKY::Contributors]
+    [ATOOMIC::Contributors]
     [Git::Contributors]
 
     [SurgicalPodWeaver]
-    ; See Pod::Weaver::PluginBundle::DROLSKY in this same distro for more info
-    config_plugin = @DROLSKY
+    ; See Pod::Weaver::PluginBundle::ATOOMIC in this same distro for more info
+    config_plugin = @ATOOMIC
 
     ; Nasty hack so I can pass config from the dist.ini to the Pod::Weaver
     ; bundle. Currently used so I can set
-    ; "DROLSKY::WeaverConfig.include_donations_pod = 0" in a dist.ini file.
-    [DROLSKY::WeaverConfig]
+    ; "ATOOMIC::WeaverConfig.include_donations_pod = 0" in a dist.ini file.
+    [ATOOMIC::WeaverConfig]
 
     [ReadmeAnyFromPod / README.md in build]
     type     = markdown
@@ -218,13 +218,13 @@ This is more or less equivalent to the following `dist.ini`:
     phase    = build
 
     [GenerateFile::FromShareDir / Generate CONTRIBUTING.md]
-    -dist     = Dist-Zilla-PluginBundle-DROLSKY
+    -dist     = Dist-Zilla-PluginBundle-ATOOMIC
     -filename = CONTRIBUTING.md
     ; This is determined by looking through the distro for .xs files.
     has_xs    = ...
 
     [GenerateFile::FromShareDir / Generate CODE_OF_CONDUCT.md]
-    -dist     = Dist-Zilla-PluginBundle-DROLSKY
+    -dist     = Dist-Zilla-PluginBundle-ATOOMIC
     -filename = CODE_OF_CONDUCT.md
 
     [InstallGuide]
@@ -236,7 +236,7 @@ This is more or less equivalent to the following `dist.ini`:
     ; Like the default License plugin except that it defaults to Artistic 2.0.
     ; Also, if the copyright_year for the bundle is not this year, it passes
     ; something like "2014-2016" to Software::License.
-    [DROLSKY::License]
+    [ATOOMIC::License]
 
     [CheckPrereqsIndexed]
     [EnsureChangesHasContent]
@@ -244,12 +244,12 @@ This is more or less equivalent to the following `dist.ini`:
     ; Just like Dist::Zilla::Plugin::Git::CheckFor::CorrectBranch except that
     ; it allows releases from any branch for TRIAL
     ; releases. https://github.com/RsrchBoy/dist-zilla-pluginbundle-git-checkfor/issues/24
-    [DROLSKY::Git::CheckFor::CorrectBranch]
+    [ATOOMIC::Git::CheckFor::CorrectBranch]
 
     [Git::CheckFor::MergeConflicts]
 
     ; Generates/updates tidyall.ini, perlcriticrc, and perltidyrc
-    [DROLSKY::TidyAll]
+    [ATOOMIC::TidyAll]
 
     ; The allow_dirty list is basically all of the generated or munged files
     ; in the distro, including:
@@ -282,42 +282,25 @@ This is more or less equivalent to the following `dist.ini`:
 
 # SUPPORT
 
-Bugs may be submitted at [https://github.com/autarch/Dist-Zilla-PluginBundle-DROLSKY/issues](https://github.com/autarch/Dist-Zilla-PluginBundle-DROLSKY/issues).
-
 I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
 
 # SOURCE
 
-The source code repository for Dist-Zilla-PluginBundle-DROLSKY can be found at [https://github.com/autarch/Dist-Zilla-PluginBundle-DROLSKY](https://github.com/autarch/Dist-Zilla-PluginBundle-DROLSKY).
-
-# DONATIONS
-
-If you'd like to thank me for the work I've done on this module, please
-consider making a "donation" to me via PayPal. I spend a lot of free time
-creating free software, and would appreciate any support you'd care to offer.
-
-Please note that **I am not suggesting that you must do this** in order for me
-to continue working on this particular software. I will continue to do so,
-inasmuch as I have in the past, for as long as it interests me.
-
-Similarly, a donation made in this way will probably not make me work on this
-software much more, unless I get so many donations that I can consider working
-on free software full time (let's all have a chuckle at that together).
-
-To donate, log into PayPal and send money to autarch@urth.org, or use the
-button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html).
+The source code repository for Dist-Zilla-PluginBundle-ATOOMIC can be found at [https://github.com/atoomic/Dist-Zilla-PluginBundle-ATOOMIC](https://github.com/atoomic/Dist-Zilla-PluginBundle-ATOOMIC).
 
 # AUTHOR
 
-Dave Rolsky <autarch@urth.org>
+Nicolas R <atoomic@cpan.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-Mark Fowler <mark@twoshortplanks.com>
+- Dave Rolsky <autarch@urth.org>
+- Mark Fowler <mark@twoshortplanks.com>
+- Nicolas Rochelemagne <rochelemagne@cpanel.net>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 - 2018 by Dave Rolsky.
+This software is Copyright (c) 2018 by Nicolas R.
 
 This is free software, licensed under:
 

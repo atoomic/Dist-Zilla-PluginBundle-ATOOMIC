@@ -1,4 +1,4 @@
-package Dist::Zilla::PluginBundle::DROLSKY;
+package Dist::Zilla::PluginBundle::ATOOMIC;
 
 use v5.10;
 
@@ -23,12 +23,12 @@ use Dist::Zilla::Plugin::CheckSelfDependency;
 use Dist::Zilla::Plugin::CheckStrictVersion;
 use Dist::Zilla::Plugin::CheckVersionIncrement;
 use Dist::Zilla::Plugin::CopyFilesFromBuild;
-use Dist::Zilla::Plugin::DROLSKY::Contributors;
-use Dist::Zilla::Plugin::DROLSKY::License;
-use Dist::Zilla::Plugin::DROLSKY::MakeMaker;
-use Dist::Zilla::Plugin::DROLSKY::RunExtraTests;
-use Dist::Zilla::Plugin::DROLSKY::TidyAll;
-use Dist::Zilla::Plugin::DROLSKY::WeaverConfig;
+use Dist::Zilla::Plugin::ATOOMIC::Contributors;
+use Dist::Zilla::Plugin::ATOOMIC::License;
+use Dist::Zilla::Plugin::ATOOMIC::MakeMaker;
+use Dist::Zilla::Plugin::ATOOMIC::RunExtraTests;
+use Dist::Zilla::Plugin::ATOOMIC::TidyAll;
+use Dist::Zilla::Plugin::ATOOMIC::WeaverConfig;
 use Dist::Zilla::Plugin::EnsureChangesHasContent 0.02;
 use Dist::Zilla::Plugin::GenerateFile::FromShareDir 0.013;
 use Dist::Zilla::Plugin::Git::Check;
@@ -71,8 +71,8 @@ use Dist::Zilla::Plugin::VersionFromMainModule 0.02;
 use Moose;
 
 with 'Dist::Zilla::Role::PluginBundle::Easy',
-    'Dist::Zilla::Role::PluginBundle::PluginRemover',
-    'Dist::Zilla::Role::PluginBundle::Config::Slicer';
+  'Dist::Zilla::Role::PluginBundle::PluginRemover',
+  'Dist::Zilla::Role::PluginBundle::Config::Slicer';
 
 has dist => (
     is       => 'ro',
@@ -83,13 +83,13 @@ has dist => (
 has make_tool => (
     is      => 'ro',
     isa     => 'Str',
-    default => 'DROLSKY::MakeMaker',
+    default => 'ATOOMIC::MakeMaker',
 );
 
 has authority => (
     is      => 'ro',
     isa     => 'Str',
-    default => 'DROLSKY',
+    default => 'ATOOMIC',
 );
 
 has prereqs_skip => (
@@ -237,10 +237,10 @@ has _files_to_copy_from_build => (
 );
 
 my @array_params = grep { !/^_/ } map { $_->name }
-    grep {
-           $_->has_type_constraint
-        && $_->type_constraint->is_a_type_of('ArrayRef')
-    } __PACKAGE__->meta->get_all_attributes;
+  grep {
+         $_->has_type_constraint
+      && $_->type_constraint->is_a_type_of('ArrayRef')
+  } __PACKAGE__->meta->get_all_attributes;
 
 sub mvp_multivalue_args {
     return @array_params;
@@ -301,7 +301,7 @@ sub _build_plugins {
         'InstallGuide',
         'CPANFile',
         $self->_maybe_ppport_plugin,
-        'DROLSKY::License',
+        'ATOOMIC::License',
         $self->_release_check_plugins,
         $self->_tidyall_plugin,
         $self->_git_plugins,
@@ -351,16 +351,16 @@ sub _basic_plugins {
     # These are a subset of the @Basic bundle except for CheckVersionIncrement
     # and VersionFromMainModule.
     qw(
-        ManifestSkip
-        License
-        ExecDir
-        ShareDir
-        Manifest
-        CheckVersionIncrement
-        TestRelease
-        ConfirmRelease
-        UploadToCPAN
-        VersionFromMainModule
+      ManifestSkip
+      License
+      ExecDir
+      ShareDir
+      Manifest
+      CheckVersionIncrement
+      TestRelease
+      ConfirmRelease
+      UploadToCPAN
+      VersionFromMainModule
     );
 }
 
@@ -403,15 +403,14 @@ sub _build_files_to_copy_from_build {
     my $self = shift;
 
     my @files = qw(
-        CODE_OF_CONDUCT.md
-        CONTRIBUTING.md
-        LICENSE
-        README.md
-        cpanfile
+      CODE_OF_CONDUCT.md
+      CONTRIBUTING.md
+      LICENSE
+      README.md
+      cpanfile
     );
 
-    push @files,
-        $self->make_tool =~ /MakeMaker/ ? 'Makefile.PL' : 'Build.PL';
+    push @files, $self->make_tool =~ /MakeMaker/ ? 'Makefile.PL' : 'Build.PL';
 
     if ( $self->has_xs ) {
         if ( $self->payload->{'PPPort.filename'} ) {
@@ -436,6 +435,8 @@ sub _github_plugins {
                 bugs         => $self->use_github_issues,
                 homepage     => $self->use_github_homepage,
                 require_auth => 1,
+
+                #repo => 'gh', # ordering issue ?
             },
         ],
         [ 'GitHub::Update' => { metacpan => 1 } ],
@@ -449,11 +450,11 @@ sub _meta_plugins {
         [ MetaResources           => $self->_meta_resources, ],
         [ 'MetaProvides::Package' => { meta_noindex => 1 } ],
         qw(
-            Meta::Contributors
-            MetaConfig
-            MetaJSON
-            MetaYAML
-            ),
+          Meta::Contributors
+          MetaConfig
+          MetaJSON
+          MetaYAML
+          ),
     );
 }
 
@@ -463,19 +464,18 @@ sub _meta_resources {
     my %resources;
 
     unless ( $self->use_github_homepage ) {
-        $resources{homepage}
-            = sprintf( 'http://metacpan.org/release/%s', $self->dist );
+        $resources{homepage} =
+          sprintf( 'http://metacpan.org/release/%s', $self->dist );
     }
 
     unless ( $self->use_github_issues ) {
         %resources = (
             %resources,
-            'bugtracker.web' => sprintf(
-                'http://rt.cpan.org/Public/Dist/Display.html?Name=%s',
-                $self->dist
-            ),
+            'bugtracker.web' =>
+              sprintf( 'http://rt.cpan.org/Public/Dist/Display.html?Name=%s',
+                $self->dist ),
             'bugtracker.mailto' =>
-                sprintf( 'bug-%s@rt.cpan.org', lc $self->dist ),
+              sprintf( 'bug-%s@rt.cpan.org', lc $self->dist ),
         );
     }
 
@@ -487,9 +487,9 @@ sub _next_release_plugin {
 
     return [
         NextRelease => {
-                  format => '%-'
-                . $self->next_release_width
-                . 'v %{yyyy-MM-dd}d%{ (TRIAL RELEASE)}T'
+                format => '%-'
+              . $self->next_release_width
+              . 'v %{yyyy-MM-dd}d%{ (TRIAL RELEASE)}T'
         },
     ];
 }
@@ -497,21 +497,22 @@ sub _next_release_plugin {
 sub _explicit_prereq_plugins {
     my $self = shift;
 
-    my $test_more = $self->_dist_uses_test2
-        ? [
+    my $test_more =
+      $self->_dist_uses_test2
+      ? [
         'Prereqs' => 'Test::More with Test2' => {
             -phase       => 'test',
             -type        => 'requires',
             'Test::More' => '1.302015',
         }
-        ]
-        : [
+      ]
+      : [
         'Prereqs' => 'Test::More with subtest' => {
             -phase       => 'test',
             -type        => 'requires',
             'Test::More' => '0.96',
         }
-        ];
+      ];
 
     return (
         $test_more,
@@ -532,21 +533,20 @@ sub _explicit_prereq_plugins {
         ],
         [
             'Prereqs' =>
-                'Test::Version which fixes https://github.com/plicease/Test-Version/issues/7'
-                => {
+'Test::Version which fixes https://github.com/plicease/Test-Version/issues/7'
+              => {
                 -phase          => 'develop',
                 -type           => 'requires',
                 'Test::Version' => '2.05',
-                },
+              },
         ],
     );
 }
 
 sub _dist_uses_test2 {
     my $rule = Path::Iterator::Rule->new;
-    my $iter
-        = $rule->file->name(qr/\.(t|pm)/)->contents_match(qr/^use Test2/m)
-        ->iter('t');
+    my $iter = $rule->file->name(qr/\.(t|pm)/)->contents_match(qr/^use Test2/m)
+      ->iter('t');
 
     while ( my $file = $iter->() ) {
         return 1;
@@ -572,13 +572,13 @@ sub _prompt_if_stale_plugin {
                 check_authordeps  => 1,
                 skip              => [
                     qw(
-                        Dist::Zilla::Plugin::DROLSKY::Contributors
-                        Dist::Zilla::Plugin::DROLSKY::Git::CheckFor::CorrectBranch
-                        Dist::Zilla::Plugin::DROLSKY::License
-                        Dist::Zilla::Plugin::DROLSKY::TidyAll
-                        Dist::Zilla::Plugin::DROLSKY::WeaverConfig
-                        Pod::Weaver::PluginBundle::DROLSKY
-                        )
+                      Dist::Zilla::Plugin::ATOOMIC::Contributors
+                      Dist::Zilla::Plugin::ATOOMIC::Git::CheckFor::CorrectBranch
+                      Dist::Zilla::Plugin::ATOOMIC::License
+                      Dist::Zilla::Plugin::ATOOMIC::TidyAll
+                      Dist::Zilla::Plugin::ATOOMIC::WeaverConfig
+                      Pod::Weaver::PluginBundle::ATOOMIC
+                      )
                 ],
             }
         ],
@@ -641,12 +641,12 @@ sub _all_stopwords {
 
 sub _default_stopwords {
     return qw(
-        drolsky
-        DROLSKY
-        DROLSKY's
-        PayPal
-        Rolsky
-        Rolsky's
+      drolsky
+      ATOOMIC
+      ATOOMIC's
+      PayPal
+      Rolsky
+      Rolsky's
     );
 }
 
@@ -655,16 +655,16 @@ sub _extra_test_plugins {
 
     return (
         qw(
-            DROLSKY::RunExtraTests
-            MojibakeTests
-            Test::CleanNamespaces
-            Test::CPAN::Changes
-            Test::CPAN::Meta::JSON
-            Test::EOL
-            Test::NoTabs
-            Test::Portability
-            Test::Synopsis
-            ),
+          ATOOMIC::RunExtraTests
+          MojibakeTests
+          Test::CleanNamespaces
+          Test::CPAN::Changes
+          Test::CPAN::Meta::JSON
+          Test::EOL
+          Test::NoTabs
+          Test::Portability
+          Test::Synopsis
+          ),
         [
             'Test::TidyAll' => {
                 verbose => 1,
@@ -682,8 +682,8 @@ sub _extra_test_plugins {
 
 sub _contributors_plugins {
     qw(
-        DROLSKY::Contributors
-        Git::Contributors
+      ATOOMIC::Contributors
+      Git::Contributors
     );
 }
 
@@ -691,10 +691,10 @@ sub _pod_weaver_plugin {
     return (
         [
             SurgicalPodWeaver => {
-                config_plugin => '@DROLSKY',
+                config_plugin => '@ATOOMIC',
             },
         ],
-        'DROLSKY::WeaverConfig',
+        'ATOOMIC::WeaverConfig',
     );
 }
 
@@ -744,12 +744,12 @@ sub _release_check_plugins {
     return (
         [ CheckStrictVersion => { decimal_only => 1 } ],
         qw(
-            CheckSelfDependency
-            CheckPrereqsIndexed
-            DROLSKY::Git::CheckFor::CorrectBranch
-            EnsureChangesHasContent
-            Git::CheckFor::MergeConflicts
-            ),
+          CheckSelfDependency
+          CheckPrereqsIndexed
+          ATOOMIC::Git::CheckFor::CorrectBranch
+          EnsureChangesHasContent
+          Git::CheckFor::MergeConflicts
+          ),
     );
 }
 
@@ -758,12 +758,12 @@ sub _tidyall_plugin {
 
     my %tidyall_config;
     $tidyall_config{sections} = $self->tidyall_section
-        if $self->_has_tidyall_section;
+      if $self->_has_tidyall_section;
     $tidyall_config{stopwords_file} = $self->stopwords_file
-        if $self->_has_stopwords_file;
+      if $self->_has_stopwords_file;
 
-    return 'DROLSKY::TidyAll' unless keys %tidyall_config;
-    return [ 'DROLSKY::TidyAll' => \%tidyall_config ];
+    return 'ATOOMIC::TidyAll' unless keys %tidyall_config;
+    return [ 'ATOOMIC::TidyAll' => \%tidyall_config ];
 }
 
 sub _git_plugins {
@@ -774,9 +774,9 @@ sub _git_plugins {
     # important. We want to check the release, then we ...
 
     return (
-        # Check that the working directory does not contain any surprising uncommitted
-        # changes (except for things we expect to be dirty like the README.md or
-        # Changes).
+  # Check that the working directory does not contain any surprising uncommitted
+  # changes (except for things we expect to be dirty like the README.md or
+  # Changes).
         [ 'Git::Check' => { allow_dirty => $self->_allow_dirty }, ],
 
         # Commit all the dirty files before the release.
@@ -788,9 +788,9 @@ sub _git_plugins {
 
         # Tag the release and push both the above commit and the tag.
         qw(
-            Git::Tag
-            Git::Push
-            ),
+          Git::Tag
+          Git::Push
+          ),
 
         # Bump all module versions.
         'BumpVersionAfterRelease',
@@ -816,9 +816,9 @@ sub _build_allow_dirty {
     return [
         @{ $self->_exclude_filenames },
         qw(
-            Changes
-            tidyall.ini
-            )
+          Changes
+          tidyall.ini
+          )
     ];
 }
 
@@ -826,17 +826,15 @@ sub _build_has_xs {
     my $self = shift;
 
     my $rule = Path::Iterator::Rule->new;
-    return $rule->skip_dirs(
-        '.build',
-        $self->dist . '-*',
-    )->file->name(qr/\.xs$/)->iter('.')->() ? 1 : 0;
+    return $rule->skip_dirs( '.build', $self->dist . '-*', )
+      ->file->name(qr/\.xs$/)->iter('.')->() ? 1 : 0;
 }
 
 __PACKAGE__->meta->make_immutable;
 
 1;
 
-# ABSTRACT: DROLSKY's plugin bundle
+# ABSTRACT: ATOOMIC's plugin bundle
 
 __END__
 
@@ -845,18 +843,18 @@ __END__
 =head1 SYNOPSIS
 
     name    = My-Module
-    author  = Dave Rolsky <autarch@urth.org>
+    author  = Nicolas R <atoomic@cpan.org>
     license = Artistic_2_0
     copyright_holder = Dave Rolsky
 
-    [@DROLSKY]
+    [@ATOOMIC]
     dist = My-Module
-    ; Default is DROLSKY::MakeMaker - or set it to ModuleBuild
-    make_tool = DROLSKY::MakeMaker
+    ; Default is ATOOMIC::MakeMaker - or set it to ModuleBuild
+    make_tool = ATOOMIC::MakeMaker
     ; These files won't be added to tarball
     exclude_files = ...
-    ; Default is DROLSKY
-    authority = DROLSKY
+    ; Default is ATOOMIC
+    authority = ATOOMIC
     ; Used to do things like add the PPPort plugin - determined automatically but can be overridden
     has_xs = ...
     ; Passed to AutoPrereqs - can be repeated
@@ -890,8 +888,8 @@ configure any plugin as needed.
 
 This is more or less equivalent to the following F<dist.ini>:
 
-    ; Picks one of these - defaults to DROLSKY::MakeMaker
-    [DROLSKY::MakeMaker]
+    ; Picks one of these - defaults to ATOOMIC::MakeMaker
+    [ATOOMIC::MakeMaker]
     [ModuleBuild]
 
     [Git::GatherDir]
@@ -983,18 +981,18 @@ This is more or less equivalent to the following F<dist.ini>:
 
     [PromptIfStale]
     phase  = build
-    module = Dist::Zilla::PluginBundle::DROLSKY
+    module = Dist::Zilla::PluginBundle::ATOOMIC
 
     [PromptIfStale]
     phase = release
     check_all_plugins = 1
     check_all_prereqs = 1
     check_authordeps  = 1
-    skip = Dist::Zilla::Plugin::DROLSKY::Contributors
-    skip = Dist::Zilla::Plugin::DROLSKY::Git::CheckFor::CorrectBranch
-    skip = Dist::Zilla::Plugin::DROLSKY::License
-    skip = Dist::Zilla::Plugin::DROLSKY::TidyAll
-    skip = Pod::Weaver::PluginBundle::DROLSKY
+    skip = Dist::Zilla::Plugin::ATOOMIC::Contributors
+    skip = Dist::Zilla::Plugin::ATOOMIC::Git::CheckFor::CorrectBranch
+    skip = Dist::Zilla::Plugin::ATOOMIC::License
+    skip = Dist::Zilla::Plugin::ATOOMIC::TidyAll
+    skip = Pod::Weaver::PluginBundle::ATOOMIC
 
     [Test::Pod::Coverage::Configurable]
     ; Configured by setting pod_coverage_class for the bundle
@@ -1010,7 +1008,7 @@ This is more or less equivalent to the following F<dist.ini>:
 
     [PodSyntaxTests]
 
-    [DROLSKY::RunExtraTests]
+    [ATOOMIC::RunExtraTests]
     [MojibakeTests]
     [Test::CleanNamespaces]
     [Test::CPAN::Changes]
@@ -1035,17 +1033,17 @@ This is more or less equivalent to the following F<dist.ini>:
     is_strict = 1
 
     ; Generates/updates a .mailmap file
-    [DROLSKY::Contributors]
+    [ATOOMIC::Contributors]
     [Git::Contributors]
 
     [SurgicalPodWeaver]
-    ; See Pod::Weaver::PluginBundle::DROLSKY in this same distro for more info
-    config_plugin = @DROLSKY
+    ; See Pod::Weaver::PluginBundle::ATOOMIC in this same distro for more info
+    config_plugin = @ATOOMIC
 
     ; Nasty hack so I can pass config from the dist.ini to the Pod::Weaver
     ; bundle. Currently used so I can set
-    ; "DROLSKY::WeaverConfig.include_donations_pod = 0" in a dist.ini file.
-    [DROLSKY::WeaverConfig]
+    ; "ATOOMIC::WeaverConfig.include_donations_pod = 0" in a dist.ini file.
+    [ATOOMIC::WeaverConfig]
 
     [ReadmeAnyFromPod / README.md in build]
     type     = markdown
@@ -1054,13 +1052,13 @@ This is more or less equivalent to the following F<dist.ini>:
     phase    = build
 
     [GenerateFile::FromShareDir / Generate CONTRIBUTING.md]
-    -dist     = Dist-Zilla-PluginBundle-DROLSKY
+    -dist     = Dist-Zilla-PluginBundle-ATOOMIC
     -filename = CONTRIBUTING.md
     ; This is determined by looking through the distro for .xs files.
     has_xs    = ...
 
     [GenerateFile::FromShareDir / Generate CODE_OF_CONDUCT.md]
-    -dist     = Dist-Zilla-PluginBundle-DROLSKY
+    -dist     = Dist-Zilla-PluginBundle-ATOOMIC
     -filename = CODE_OF_CONDUCT.md
 
     [InstallGuide]
@@ -1072,7 +1070,7 @@ This is more or less equivalent to the following F<dist.ini>:
     ; Like the default License plugin except that it defaults to Artistic 2.0.
     ; Also, if the copyright_year for the bundle is not this year, it passes
     ; something like "2014-2016" to Software::License.
-    [DROLSKY::License]
+    [ATOOMIC::License]
 
     [CheckPrereqsIndexed]
     [EnsureChangesHasContent]
@@ -1080,12 +1078,12 @@ This is more or less equivalent to the following F<dist.ini>:
     ; Just like Dist::Zilla::Plugin::Git::CheckFor::CorrectBranch except that
     ; it allows releases from any branch for TRIAL
     ; releases. https://github.com/RsrchBoy/dist-zilla-pluginbundle-git-checkfor/issues/24
-    [DROLSKY::Git::CheckFor::CorrectBranch]
+    [ATOOMIC::Git::CheckFor::CorrectBranch]
 
     [Git::CheckFor::MergeConflicts]
 
     ; Generates/updates tidyall.ini, perlcriticrc, and perltidyrc
-    [DROLSKY::TidyAll]
+    [ATOOMIC::TidyAll]
 
     ; The allow_dirty list is basically all of the generated or munged files
     ; in the distro, including:
