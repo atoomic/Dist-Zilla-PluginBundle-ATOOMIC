@@ -49,7 +49,6 @@ requires "Dist::Zilla::Plugin::Test::PodSpelling" => "0";
 requires "Dist::Zilla::Plugin::Test::Portability" => "0";
 requires "Dist::Zilla::Plugin::Test::ReportPrereqs" => "0";
 requires "Dist::Zilla::Plugin::Test::Synopsis" => "0";
-requires "Dist::Zilla::Plugin::Test::TidyAll" => "0.04";
 requires "Dist::Zilla::Plugin::Test::Version" => "0";
 requires "Dist::Zilla::Plugin::VersionFromMainModule" => "0.02";
 requires "Dist::Zilla::Role::BeforeBuild" => "0";
@@ -108,21 +107,14 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
-  requires "Code::TidyAll" => "0.56";
-  requires "Code::TidyAll::Plugin::SortLines::Naturally" => "0.000003";
-  requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
   requires "IPC::Open3" => "0";
-  requires "Parallel::ForkManager" => "1.19";
-  requires "Perl::Critic" => "1.126";
-  requires "Perl::Tidy" => "20160302";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Pod::Wordlist" => "0";
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::CPAN::Meta::JSON" => "0.16";
   requires "Test::CleanNamespaces" => "0.15";
-  requires "Test::Code::TidyAll" => "0.50";
   requires "Test::EOL" => "0";
   requires "Test::Mojibake" => "0";
   requires "Test::More" => "0.96";
@@ -131,6 +123,5 @@ on 'develop' => sub {
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Portability::Files" => "0";
   requires "Test::Spelling" => "0.12";
-  requires "Test::Vars" => "0.009";
   requires "Test::Version" => "2.05";
 };

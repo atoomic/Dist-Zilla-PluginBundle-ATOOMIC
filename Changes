@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- very first version
+
 0.99     2018-06-21
 
 - Add a plugin to generate a CODE_OF_CONDUCT.md and copy this into the repo

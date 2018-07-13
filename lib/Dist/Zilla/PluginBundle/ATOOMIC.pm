@@ -64,7 +64,7 @@ use Dist::Zilla::Plugin::Test::PodSpelling;
 use Dist::Zilla::Plugin::Test::Portability;
 use Dist::Zilla::Plugin::Test::ReportPrereqs;
 use Dist::Zilla::Plugin::Test::Synopsis;
-use Dist::Zilla::Plugin::Test::TidyAll 0.04;
+#use Dist::Zilla::Plugin::Test::TidyAll 0.04;
 use Dist::Zilla::Plugin::Test::Version;
 use Dist::Zilla::Plugin::VersionFromMainModule 0.02;
 
@@ -303,7 +303,7 @@ sub _build_plugins {
         $self->_maybe_ppport_plugin,
         'ATOOMIC::License',
         $self->_release_check_plugins,
-        $self->_tidyall_plugin,
+        #$self->_tidyall_plugin,
         $self->_git_plugins,
 
         # This needs to be last so that MakeMaker::Awesome can see all the
@@ -518,19 +518,19 @@ sub _explicit_prereq_plugins {
         $test_more,
 
         # Because Code::TidyAll does not depend on them
-        [
-            'Prereqs' => 'Modules for use with tidyall' => {
-                -phase                                        => 'develop',
-                -type                                         => 'requires',
-                'Code::TidyAll'                               => '0.56',
-                'Code::TidyAll::Plugin::SortLines::Naturally' => '0.000003',
-                'Code::TidyAll::Plugin::Test::Vars'           => '0.02',
-                'Parallel::ForkManager'                       => '1.19',
-                'Perl::Critic'                                => '1.126',
-                'Perl::Tidy'                                  => '20160302',
-                'Test::Vars'                                  => '0.009',
-            }
-        ],
+        # [
+        #     'Prereqs' => 'Modules for use with tidyall' => {
+        #         -phase                                        => 'develop',
+        #         -type                                         => 'requires',
+        #         'Code::TidyAll'                               => '0.56',
+        #         'Code::TidyAll::Plugin::SortLines::Naturally' => '0.000003',
+        #         'Code::TidyAll::Plugin::Test::Vars'           => '0.02',
+        #         'Parallel::ForkManager'                       => '1.19',
+        #         'Perl::Critic'                                => '1.126',
+        #         'Perl::Tidy'                                  => '20160302',
+        #         'Test::Vars'                                  => '0.009',
+        #     }
+        # ],
         [
             'Prereqs' =>
                 'Test::Version which fixes https://github.com/plicease/Test-Version/issues/7'
@@ -576,7 +576,6 @@ sub _prompt_if_stale_plugin {
                         Dist::Zilla::Plugin::ATOOMIC::Contributors
                         Dist::Zilla::Plugin::ATOOMIC::Git::CheckFor::CorrectBranch
                         Dist::Zilla::Plugin::ATOOMIC::License
-                        Dist::Zilla::Plugin::ATOOMIC::TidyAll
                         Dist::Zilla::Plugin::ATOOMIC::WeaverConfig
                         Pod::Weaver::PluginBundle::ATOOMIC
                         )
@@ -666,15 +665,15 @@ sub _extra_test_plugins {
             Test::Portability
             Test::Synopsis
             ),
-        [
-            'Test::TidyAll' => {
-                verbose => 1,
-                jobs    => 4,
+        # [
+        #     'Test::TidyAll' => {
+        #         verbose => 1,
+        #         jobs    => 4,
 
-                # Test::Vars requires this version
-                minimum_perl => '5.010',
-            }
-        ],
+        #         # Test::Vars requires this version
+        #         minimum_perl => '5.010',
+        #     }
+        # ],
         [ 'Test::Compile'       => { xt_mode        => 1 } ],
         [ 'Test::ReportPrereqs' => { verify_prereqs => 1 } ],
         [ 'Test::Version'       => { is_strict      => 1 } ],
